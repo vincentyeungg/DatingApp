@@ -33,6 +33,7 @@ namespace API
                 options.UseSqlite(_configuration.GetConnectionString("DefaultConnection"));
             });
             services.AddControllers();
+            services.AddCors();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -46,6 +47,9 @@ namespace API
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            // the placement of this middleware is very important! must be after useRouting but before useEndpoints and useAuth
+            app.UseCors(policy => policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200"));
 
             app.UseAuthorization();
 
