@@ -20,7 +20,8 @@
         </ul>
 
         <div class="dropdown" *ngIf="(accountService.currentUser$ | async) as user" dropdown>
-            <button class="dropdown-toggle btn btn-info" dropdownToggle>Welcome {{user.username | titlecase}}</button>
+            <img src="{{user.photoUrl}}" alt="{{user.username}}">
+            <button class="dropdown-toggle btn btn-info ms-2" dropdownToggle>Welcome {{user.username | titlecase}}</button>
             <div class="dropdown-menu mt-3" *dropdownMenu>
                 <a routerLink="/member/edit" class="dropdown-item">Edit Profile</a>
                 <div class="dropdown-divider"></div>
