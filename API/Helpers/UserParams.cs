@@ -11,5 +11,11 @@ namespace API.Helpers
             get => _pageSize;
             set => _pageSize = (value > MaxPageSize) ? MaxPageSize : value; // limit max page size to 50 if user request max page size is larger
         }
+
+        public string CurrentUsername { get; set; }
+        public string Gender { get; set; }
+        public int MinAge { get; set; } = 18;
+        public int MaxAge { get; set; } = 150;
+        public string OrderBy { get; set; } = "lastActive";
     }
 }
