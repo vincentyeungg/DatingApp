@@ -8,6 +8,7 @@ using API.Extensions;
 using API.Interfaces;
 using API.Middleware;
 using API.Services;
+using API.SignalR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -39,6 +40,7 @@ namespace API
             services.AddControllers();
             services.AddCors();
             services.AddIdentifyServices(_configuration);
+            services.AddSignalR();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -57,7 +59,12 @@ namespace API
             app.UseRouting();
 
             // the placement of this middleware is very important! must be after useRouting but before useEndpoints and useAuth
-            app.UseCors(policy => policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200"));
+            app.UseCors(policy => policy
+                .AllowAnyHeader()
+                .AllowCredentials() // need this since we are using Signal R
+                .AllowAnyMethod()
+                .WithOrigins("https://localhost:4200")
+            );
 
             app.UseAuthentication();
             app.UseAuthorization();
@@ -65,6 +72,8 @@ namespace API
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHub<PresenceHub>("hubs/presence");
+                endpoints.MapHub<MessageHub>("hubs/message");
             });
         }
     }
