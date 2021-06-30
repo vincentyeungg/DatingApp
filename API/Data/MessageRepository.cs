@@ -69,25 +69,22 @@ namespace API.Data
         {
             var query = _context.Messages
                 .OrderByDescending(m => m.MessageSent) // to order by most recent messages
+                .ProjectTo<MessageDto>(_mapper.ConfigurationProvider)
                 .AsQueryable();
 
             query = messageParams.Container switch
             {
-                "Inbox" => query.Where(u => u.Recipient.UserName == messageParams.Username && u.RecipientDeleted == false), // our messages received
-                "Outbox" => query.Where(u => u.Sender.UserName == messageParams.Username && u.SenderDeleted == false), // messages sent
-                _ => query.Where(u => u.Recipient.UserName == messageParams.Username  && u.RecipientDeleted == false && u.DateRead == null) // messages received and unread
+                "Inbox" => query.Where(u => u.RecipientUsername == messageParams.Username && u.RecipientDeleted == false), // our messages received
+                "Outbox" => query.Where(u => u.SenderUsername == messageParams.Username && u.SenderDeleted == false), // messages sent
+                _ => query.Where(u => u.RecipientUsername == messageParams.Username  && u.RecipientDeleted == false && u.DateRead == null) // messages received and unread
             };
 
-            var messages = query.ProjectTo<MessageDto>(_mapper.ConfigurationProvider);
-
-            return await PagedList<MessageDto>.CreateAsync(messages, messageParams.PageNumber, messageParams.PageSize);
+            return await PagedList<MessageDto>.CreateAsync(query, messageParams.PageNumber, messageParams.PageSize);
         }
 
         public async Task<IEnumerable<MessageDto>> GetMessageThread(string currentUsername, string recipientUsername)
         {
             var messages = await _context.Messages
-                .Include(u => u.Sender).ThenInclude(p => p.Photos)
-                .Include(u => u.Recipient).ThenInclude(p => p.Photos)
                 .Where
                 (   
                     // want to obtain the messages between 2 users
@@ -100,9 +97,10 @@ namespace API.Data
                     )
                 )
                 .OrderBy(m => m.MessageSent)
+                .ProjectTo<MessageDto>(_mapper.ConfigurationProvider)
                 .ToListAsync();
 
-            var unreadMessages = messages.Where(m => m.DateRead == null && m.Recipient.UserName == currentUsername).ToList(); // current user's unread messages
+            var unreadMessages = messages.Where(m => m.DateRead == null && m.RecipientUsername == currentUsername).ToList(); // current user's unread messages
 
             if (unreadMessages.Any())
             {
@@ -110,11 +108,9 @@ namespace API.Data
                 {
                     message.DateRead = DateTime.UtcNow;
                 }
-
-                await _context.SaveChangesAsync();
             }
 
-            return _mapper.Map<IEnumerable<MessageDto>>(messages);
+            return messages;
         }
 
         public void RemoveConnection(Connection connection)
@@ -122,9 +118,5 @@ namespace API.Data
             _context.Connections.Remove(connection);
         }
 
-        public async Task<bool> SaveAllAsync()
-        {
-            return await _context.SaveChangesAsync() > 0;
-        }
     }
 }
