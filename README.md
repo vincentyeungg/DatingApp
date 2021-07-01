@@ -15,3 +15,30 @@ Visit https://pick-a-match.herokuapp.com/ to create an account and use the app. 
 - Users can start a live chat with one another
 
 # Quick peek at demo of application
+
+Register
+<img src="readme/register.PNG">
+
+Home
+<img src="readme/home.PNG">
+
+Matches
+<img src="readme/matches.PNG">
+
+Profile
+<img src="readme/profile.PNG">
+
+Description
+<img src="readme/userdescription.PNG">
+
+Like Members
+<img src="readme/memberslike.PNG">
+
+Adding Photos
+<img src="readme/addphotos.PNG">
+
+Live Messaging
+<img src="readme/livechat.PNG">
+
+Live Notifications
+<img src="readme/livenotifications.PNG">
