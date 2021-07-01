@@ -12,4 +12,4 @@ Visit https://pick-a-match.herokuapp.com/ to create an account and use the app. 
 - Users can view other registered user's details, but not edit
 - Users can start a live chat with one another
 
-#Quick peek at demo of application
+# Quick peek at demo of application
