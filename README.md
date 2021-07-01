@@ -7,6 +7,8 @@ Visit https://pick-a-match.herokuapp.com/ to create an account and use the app. 
 - Register new users
 - Authentication
 - Add user profile details i.e., interests, hobbies, etc.
+- Pagination
+- Temporary caching system to limit unnecessary API calls
 - Support profile images
 - Users can like other users
 - Users can view other registered user's details, but not edit
