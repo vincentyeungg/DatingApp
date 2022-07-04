@@ -1,5 +1,7 @@
 # Pick-A-Match
-Web application where users can find different matches from registered users, and start a chat with live messaging and presence tracking.
+Web application where users can find different matches from registered users, and start a chat with live messaging and presence tracking. This project is done based on a course offered on Udemy.
+
+It uses C#, ASP.NET Core, Sqlite & PostgreSQL, Docker, and Angular.
 
 Visit https://pick-a-match.herokuapp.com/ to create an account and use the app. The app is injected with some default users.
 
